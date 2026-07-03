@@ -42,21 +42,27 @@ const gallery = [
   "Reel List",
 ];
 
+// TODO: update once the desktop app repo is created — see
+// istv-reel-editor-desktop/README.md for the release process. The Windows
+// artifact name below must match "build.win.artifactName" in that repo's
+// package.json so this link keeps working across releases without edits.
+const DESKTOP_REPO = "jayareddy-source/istv-reel-editor-desktop";
+
 const downloads = [
   {
     os: "Windows",
     ext: ".exe installer",
-    href: "https://github.com/jayareddy-source/istv-reels-tool/releases/download/v1.0.0/ISTV%20Reels%20Tool%20Setup%201.0.0.exe",
+    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-Setup.exe`,
   },
   {
     os: "macOS",
     ext: ".dmg — coming soon",
-    href: "https://github.com/jayareddy-source/istv-reels-tool/releases",
+    href: `https://github.com/${DESKTOP_REPO}/releases`,
   },
   {
     os: "Linux",
     ext: ".AppImage — coming soon",
-    href: "https://github.com/jayareddy-source/istv-reels-tool/releases",
+    href: `https://github.com/${DESKTOP_REPO}/releases`,
   },
 ];
 
@@ -247,10 +253,10 @@ export default function Home() {
           </div>
           <p className="download-note">
             Releases published on{" "}
-            <a href="https://github.com/insidesuccess/istv-reels-tool/releases" target="_blank" rel="noreferrer">
+            <a href={`https://github.com/${DESKTOP_REPO}/releases`} target="_blank" rel="noreferrer">
               GitHub Releases
             </a>
-            . Update links above with your release URLs before publishing.
+            .
           </p>
         </div>
       </section>
