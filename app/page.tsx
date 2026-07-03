@@ -42,11 +42,10 @@ const gallery = [
   "Reel List",
 ];
 
-// TODO: update once the desktop app repo is created — see
-// istv-reel-editor-desktop/README.md for the release process. The Windows
+// See istv-reel-editor-desktop/README.md for the release process. The Windows
 // artifact name below must match "build.win.artifactName" in that repo's
 // package.json so this link keeps working across releases without edits.
-const DESKTOP_REPO = "jayareddy-source/istv-reel-editor-desktop";
+const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 
 const downloads = [
   {
