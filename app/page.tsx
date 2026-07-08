@@ -55,8 +55,8 @@ const downloads = [
   },
   {
     os: "macOS",
-    ext: ".dmg — coming soon",
-    href: `https://github.com/${DESKTOP_REPO}/releases`,
+    ext: "Apple Silicon (.dmg)",
+    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor-0.1.0-arm64.dmg`,
   },
   {
     os: "Linux",
