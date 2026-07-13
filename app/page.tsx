@@ -42,16 +42,16 @@ const gallery = [
   "Reel List",
 ];
 
-// See istv-reel-editor-desktop/README.md for the release process. The Windows
-// artifact name below must match "build.win.artifactName" in that repo's
-// package.json so this link keeps working across releases without edits.
+// See istv-reel-editor-desktop/README.md for the release process. These
+// filenames must match the asset names actually published on the latest
+// GitHub release (electron-builder names them with dots + build version).
 const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 
 const downloads = [
   {
     os: "Windows",
     ext: ".exe installer",
-    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-Setup.exe`,
+    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor.Setup.0.1.0.exe`,
   },
   {
     os: "macOS",
