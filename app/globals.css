@@ -874,29 +874,51 @@ footer p {
 
 .download-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  max-width: 720px;
+  max-width: 940px;
   margin: 0 auto;
 }
 
 .download-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 36px 24px;
+  gap: 8px;
+  padding: 40px 26px 30px;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--card);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.07), transparent 60%),
+    var(--card);
   backdrop-filter: blur(10px);
   text-align: center;
-  transition: border-color 180ms ease, background 180ms ease;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .download-card:hover {
-  border-color: rgba(255, 255, 255, 0.36);
-  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.9);
+}
+
+.download-icon {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  margin-bottom: 6px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--white);
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.download-card:hover .download-icon {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .download-os {
@@ -904,6 +926,18 @@ footer p {
   font-family: var(--heading-font);
   font-size: 1.35rem;
   font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.download-tag {
+  padding: 3px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--white);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -914,34 +948,52 @@ footer p {
 
 .download-btn {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 42px;
+  width: 100%;
   align-items: center;
   justify-content: center;
-  margin-top: 8px;
+  margin-top: 14px;
   padding: 0 28px;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: 999px;
-  color: var(--white);
+  background: var(--white);
+  color: var(--header);
   font-size: 0.78rem;
   font-weight: 900;
   text-transform: uppercase;
-  transition: border-color 180ms ease;
+  letter-spacing: 0.03em;
+  transition: transform 160ms ease, background 160ms ease;
 }
 
 .download-card:hover .download-btn {
-  border-color: rgba(255, 255, 255, 0.5);
+  background: #eaeaea;
+}
+
+.download-card:active .download-btn {
+  transform: scale(0.98);
 }
 
 .download-sha {
-  margin-top: 6px;
-  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
   color: var(--text);
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.62rem;
-  line-height: 1.5;
+  font-size: 0.64rem;
   letter-spacing: 0.02em;
-  opacity: 0.65;
-  word-break: break-all;
+  opacity: 0.7;
+}
+
+.download-sha-label {
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: var(--body-font);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .download-note {

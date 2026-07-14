@@ -47,33 +47,48 @@ const gallery = [
 // GitHub release (electron-builder names them with dots + build version).
 const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 
+const WindowsGlyph = (
+  <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
+    <path d="M3 5.1 10.2 4v7.05H3zM11.15 3.87 21 2.5v8.55h-9.85zM3 12.55h7.2V19.6L3 18.5zM11.15 12.55H21V21.5l-9.85-1.36z" />
+  </svg>
+);
+
+const AppleGlyph = (
+  <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
+    <path d="M16.365 1.43c0 1.14-.42 2.2-1.12 3-.76.9-2 1.6-3.02 1.52-.14-1.1.44-2.26 1.1-3 .74-.84 2.02-1.48 3.04-1.52zM20.5 17.2c-.5 1.16-.74 1.68-1.4 2.7-.9 1.44-2.18 3.22-3.76 3.24-1.4.02-1.76-.92-3.66-.9-1.9.01-2.3.92-3.7.9-1.58-.02-2.8-1.64-3.7-3.08-2.52-4.02-2.78-8.74-1.22-11.24 1.1-1.78 2.84-2.82 4.48-2.82 1.66 0 2.7.92 4.08.92 1.34 0 2.16-.92 4.08-.92 1.46 0 3 .8 4.1 2.18-3.6 1.98-3.02 7.12.4 8.32z" />
+  </svg>
+);
+
 const downloads: {
   os: string;
+  tag: string;
   ext: string;
   href: string;
+  platform: "windows" | "apple";
   sha256?: string;
 }[] = [
   {
     os: "Windows",
+    tag: "64-bit",
     ext: ".exe installer",
     href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor.Setup.0.1.0.exe`,
+    platform: "windows",
   },
   {
     os: "macOS",
-    ext: "Apple Silicon (.dmg)",
+    tag: "Apple Silicon",
+    ext: ".dmg · M1 and newer",
     href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor-0.1.0-arm64.dmg`,
+    platform: "apple",
     sha256: "ca7ec782dad5741a356c7ce356fad274b828f607ef817b49f025b28096f9425d",
   },
   {
     os: "macOS",
-    ext: "Universal — Intel & Apple Silicon (.dmg)",
+    tag: "Universal",
+    ext: ".dmg · Intel + Apple Silicon",
     href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor-0.1.0-universal.dmg`,
+    platform: "apple",
     sha256: "494ad3993ddc39bb3b7d343e3b5989d6c92b8f31e6cda91425789ab7faff0534",
-  },
-  {
-    os: "Linux",
-    ext: ".AppImage — coming soon",
-    href: `https://github.com/${DESKTOP_REPO}/releases`,
   },
 ];
 
@@ -251,18 +266,23 @@ export default function Home() {
             <h2>Download the desktop app</h2>
           </div>
           <p className="download-sub">
-            Free to use. Requires backend connection. Available for Windows, macOS, and Linux.
+            Free to use. Requires backend connection. Available for Windows and macOS.
           </p>
           <div className="download-grid">
             {downloads.map((d) => (
-              <a className="download-card" href={d.href} key={`${d.os}-${d.ext}`} target="_blank" rel="noreferrer">
+              <a className="download-card" href={d.href} key={`${d.os}-${d.tag}`} target="_blank" rel="noreferrer">
+                <span className="download-icon" aria-hidden="true">
+                  {d.platform === "apple" ? AppleGlyph : WindowsGlyph}
+                </span>
                 <strong className="download-os">{d.os}</strong>
+                <span className="download-tag">{d.tag}</span>
                 <span className="download-ext">{d.ext}</span>
                 <span className="download-btn">Download</span>
                 {d.sha256 ? (
-                  <code className="download-sha" title={`SHA-256: ${d.sha256}`}>
-                    SHA-256 {d.sha256}
-                  </code>
+                  <span className="download-sha" title={`SHA-256: ${d.sha256}`}>
+                    <span className="download-sha-label">SHA-256</span>
+                    {d.sha256.slice(0, 10)}…{d.sha256.slice(-10)}
+                  </span>
                 ) : null}
               </a>
             ))}
