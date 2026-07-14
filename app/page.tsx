@@ -42,9 +42,9 @@ const gallery = [
   "Reel List",
 ];
 
-// See istv-reel-editor-desktop/README.md for the release process. These
-// filenames must match the asset names actually published on the latest
-// GitHub release (electron-builder names them with dots + build version).
+// See istv-reel-editor-desktop for the release process. These filenames are
+// version-less and stable (electron-builder `artifactName`), so the
+// `releases/latest/download/...` links keep resolving across every release.
 const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 
 const WindowsGlyph = (
@@ -71,24 +71,22 @@ const downloads: {
     os: "Windows",
     tag: "64-bit",
     ext: ".exe installer",
-    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor.Setup.0.1.0.exe`,
+    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-Setup.exe`,
     platform: "windows",
   },
   {
     os: "macOS",
     tag: "Apple Silicon",
     ext: ".dmg · M1 and newer",
-    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor-0.1.0-arm64.dmg`,
+    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-arm64.dmg`,
     platform: "apple",
-    sha256: "ca7ec782dad5741a356c7ce356fad274b828f607ef817b49f025b28096f9425d",
   },
   {
     os: "macOS",
-    tag: "Universal",
-    ext: ".dmg · Intel + Apple Silicon",
-    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor-0.1.0-universal.dmg`,
+    tag: "Intel",
+    ext: ".dmg · Intel Macs",
+    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-x64.dmg`,
     platform: "apple",
-    sha256: "494ad3993ddc39bb3b7d343e3b5989d6c92b8f31e6cda91425789ab7faff0534",
   },
 ];
 
