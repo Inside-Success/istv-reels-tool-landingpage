@@ -47,7 +47,12 @@ const gallery = [
 // GitHub release (electron-builder names them with dots + build version).
 const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 
-const downloads = [
+const downloads: {
+  os: string;
+  ext: string;
+  href: string;
+  sha256?: string;
+}[] = [
   {
     os: "Windows",
     ext: ".exe installer",
@@ -57,6 +62,13 @@ const downloads = [
     os: "macOS",
     ext: "Apple Silicon (.dmg)",
     href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor-0.1.0-arm64.dmg`,
+    sha256: "ca7ec782dad5741a356c7ce356fad274b828f607ef817b49f025b28096f9425d",
+  },
+  {
+    os: "macOS",
+    ext: "Universal — Intel & Apple Silicon (.dmg)",
+    href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV.Reel.Editor-0.1.0-universal.dmg`,
+    sha256: "494ad3993ddc39bb3b7d343e3b5989d6c92b8f31e6cda91425789ab7faff0534",
   },
   {
     os: "Linux",
@@ -243,10 +255,15 @@ export default function Home() {
           </p>
           <div className="download-grid">
             {downloads.map((d) => (
-              <a className="download-card" href={d.href} key={d.os} target="_blank" rel="noreferrer">
+              <a className="download-card" href={d.href} key={`${d.os}-${d.ext}`} target="_blank" rel="noreferrer">
                 <strong className="download-os">{d.os}</strong>
                 <span className="download-ext">{d.ext}</span>
                 <span className="download-btn">Download</span>
+                {d.sha256 ? (
+                  <code className="download-sha" title={`SHA-256: ${d.sha256}`}>
+                    SHA-256 {d.sha256}
+                  </code>
+                ) : null}
               </a>
             ))}
           </div>

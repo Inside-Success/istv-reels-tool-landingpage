@@ -874,9 +874,9 @@ footer p {
 
 .download-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  max-width: 860px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
@@ -930,6 +930,18 @@ footer p {
 
 .download-card:hover .download-btn {
   border-color: rgba(255, 255, 255, 0.5);
+}
+
+.download-sha {
+  margin-top: 6px;
+  max-width: 100%;
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  opacity: 0.65;
+  word-break: break-all;
 }
 
 .download-note {
