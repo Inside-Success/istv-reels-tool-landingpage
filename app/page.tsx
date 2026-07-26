@@ -47,6 +47,20 @@ const gallery = [
 // `releases/latest/download/...` links keep resolving across every release.
 const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 
+// The Premiere Pro panel is released on THIS repo, not on the plugin's own repo.
+// That repo is private (it holds the reel-selection prompts), and GitHub release
+// assets inherit repo visibility — so links to a private repo's assets 404 for
+// anonymous visitors. Publishing the zips here keeps the download public while the
+// source stays private.
+//
+// The bundles carry no secret. The backend URL is baked in, but the access token is
+// not: each editor enters that once in the panel and it is saved on their own
+// machine. That is what makes a public download safe.
+//
+// Asset names are version-less, so `releases/latest/download/...` keeps resolving
+// across future plugin releases without editing this file.
+const PLUGIN_REPO = "Inside-Success/istv-reels-tool-landingpage";
+
 const WindowsGlyph = (
   <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
     <path d="M3 5.1 10.2 4v7.05H3zM11.15 3.87 21 2.5v8.55h-9.85zM3 12.55h7.2V19.6L3 18.5zM11.15 12.55H21V21.5l-9.85-1.36z" />
@@ -90,6 +104,32 @@ const downloads: {
   },
 ];
 
+// Premiere Pro panel (CEP extension). Same card shape as `downloads` above so the
+// existing download-grid styles apply unchanged.
+const pluginDownloads: typeof downloads = [
+  {
+    os: "Windows",
+    tag: "64-bit",
+    ext: ".zip · double-click install.bat",
+    href: `https://github.com/${PLUGIN_REPO}/releases/latest/download/ISTV-Reel-Tool-win-x64.zip`,
+    platform: "windows",
+  },
+  {
+    os: "macOS",
+    tag: "Apple Silicon",
+    ext: ".zip · M1 and newer",
+    href: `https://github.com/${PLUGIN_REPO}/releases/latest/download/ISTV-Reel-Tool-mac-arm64.zip`,
+    platform: "apple",
+  },
+  {
+    os: "macOS",
+    tag: "Intel",
+    ext: ".zip · Intel Macs",
+    href: `https://github.com/${PLUGIN_REPO}/releases/latest/download/ISTV-Reel-Tool-mac-x64.zip`,
+    platform: "apple",
+  },
+];
+
 export default function Home() {
   return (
     <main>
@@ -102,6 +142,7 @@ export default function Home() {
           <a href="#features">Features</a>
           <a href="#workflow">Workflow</a>
           <a href="#download">Download</a>
+          <a href="#download-plugin">Premiere plugin</a>
         </div>
         <a className="nav-cta" href="#download">
           Download free
@@ -288,6 +329,53 @@ export default function Home() {
           <p className="download-note">
             Releases published on{" "}
             <a href={`https://github.com/${DESKTOP_REPO}/releases`} target="_blank" rel="noreferrer">
+              GitHub Releases
+            </a>
+            .
+          </p>
+        </div>
+      </section>
+
+      <section className="section download-section" id="download-plugin">
+        <div className="container">
+          <div className="section-heading centered">
+            <span aria-hidden="true" />
+            <h2>Or work inside Premiere Pro</h2>
+          </div>
+          <p className="download-sub">
+            The ISTV Reel Tool panel builds each reel as an editable 9:16 sequence in your own
+            Premiere project — the cuts, vertical reframe and karaoke captions already in place.
+            You finish and export in Premiere, exactly as you would any other edit.
+          </p>
+          <div className="download-grid">
+            {pluginDownloads.map((d) => (
+              <a
+                className="download-card"
+                href={d.href}
+                key={`plugin-${d.os}-${d.tag}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="download-icon" aria-hidden="true">
+                  {d.platform === "apple" ? AppleGlyph : WindowsGlyph}
+                </span>
+                <strong className="download-os">{d.os}</strong>
+                <span className="download-tag">{d.tag}</span>
+                <span className="download-ext">{d.ext}</span>
+                <span className="download-btn">Download</span>
+              </a>
+            ))}
+          </div>
+          <p className="download-note">
+            Requires Adobe Premiere Pro 2021 (15.0) or newer. Unzip, double-click{" "}
+            <strong>install.bat</strong> (Windows) or <strong>install.command</strong> (Mac), then
+            open <strong>Window ▸ Extensions ▸ ISTV Reel Tool</strong>. FFmpeg is bundled — nothing
+            else to install. The panel asks for an access token once on first run; ask your admin
+            for it.
+          </p>
+          <p className="download-note">
+            Releases published on{" "}
+            <a href={`https://github.com/${PLUGIN_REPO}/releases`} target="_blank" rel="noreferrer">
               GitHub Releases
             </a>
             .
