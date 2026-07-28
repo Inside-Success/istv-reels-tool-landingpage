@@ -45,6 +45,18 @@ const gallery = [
 // See istv-reel-editor-desktop for the release process. These filenames are
 // version-less and stable (electron-builder `artifactName`), so the
 // `releases/latest/download/...` links keep resolving across every release.
+//
+// The sha256 values are NOT stable — they describe v0.1.10 and go stale on
+// every release. Read the new ones straight off the release rather than
+// downloading ~670MB of installers to hash them:
+//
+//   gh api repos/Inside-Success/istv-reel-editor-desktop/releases/latest \
+//     --jq '.assets[] | "\(.name) \(.digest)"'
+//
+// Worth confirming the links resolve at all after a release, not just that the
+// names look right: v0.1.9 published as two releases sharing one tag, and the
+// half that went public held only the Windows installer — so both macOS links
+// below 404'd until v0.1.10, despite pointing at correct filenames.
 const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 
 // The Premiere Pro panel is released on THIS repo, not on the plugin's own repo.
@@ -87,6 +99,7 @@ const downloads: {
     ext: ".exe installer",
     href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-Setup.exe`,
     platform: "windows",
+    sha256: "f0bd4cf9e52639cbe4a0bde209b8eaa20e4a99ed422a73e44ffdb6d5b98d529f",
   },
   {
     os: "macOS",
@@ -94,6 +107,7 @@ const downloads: {
     ext: ".dmg · M1 and newer",
     href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-arm64.dmg`,
     platform: "apple",
+    sha256: "64bc2f5dbf94e2b013e90f475095abc3ef37ed62148c11d516739cf2caa2ab0f",
   },
   {
     os: "macOS",
@@ -101,6 +115,7 @@ const downloads: {
     ext: ".dmg · Intel Macs",
     href: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-x64.dmg`,
     platform: "apple",
+    sha256: "d40f0a4f148e17ac2153de47bf680876ea6c5cef49456334d81866a81731cef2",
   },
 ];
 
