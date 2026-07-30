@@ -73,6 +73,37 @@ const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 // across future plugin releases without editing this file.
 const PLUGIN_REPO = "Inside-Success/istv-reels-tool-landingpage";
 
+// The panel does NOT update itself. install.bat / install.command copy a bundle
+// into Premiere's CEP extensions folder and it stays there until someone re-runs
+// the installer, and nothing in the panel checks for a newer build. An editor
+// already running an older version therefore has no way to know a fixed one
+// exists — the download button looks identical either way. That is what this
+// version line is for.
+//
+// Read at build/revalidate time rather than hardcoded: a pinned version goes
+// stale on the very next release, exactly like the desktop sha256 values above.
+async function latestPluginVersion(): Promise<string | null> {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${PLUGIN_REPO}/releases/latest`, {
+      headers: { Accept: "application/vnd.github+json" },
+      // Unauthenticated GitHub allows 60 requests/hour per IP. Revalidating
+      // hourly keeps this to one call regardless of how much traffic the page
+      // takes, so a busy day can never rate-limit the version line away.
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return null;
+    const { tag_name: tag } = (await res.json()) as { tag_name?: string };
+    // Tags here are `plugin-v1.2.1` — the prefix keeps plugin releases distinct
+    // from anything the site itself might tag, since they share this repo.
+    return tag?.replace(/^plugin-/, "").replace(/^v/, "") || null;
+  } catch {
+    // A slow or rate-limited GitHub must never break the page. The download
+    // links resolve without this, so drop the line and render everything else.
+    return null;
+  }
+}
+
 const WindowsGlyph = (
   <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true">
     <path d="M3 5.1 10.2 4v7.05H3zM11.15 3.87 21 2.5v8.55h-9.85zM3 12.55h7.2V19.6L3 18.5zM11.15 12.55H21V21.5l-9.85-1.36z" />
@@ -145,7 +176,9 @@ const pluginDownloads: typeof downloads = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const pluginVersion = await latestPluginVersion();
+
   return (
     <main>
       <nav className="site-nav" aria-label="Primary navigation">
@@ -381,6 +414,15 @@ export default function Home() {
               </a>
             ))}
           </div>
+          {pluginVersion ? (
+            <p className="download-version">
+              <span className="download-version-label">Latest</span>v{pluginVersion}
+              <span className="download-version-hint">
+                Already installed? Download again and re-run the installer, then restart Premiere —
+                the panel does not update itself.
+              </span>
+            </p>
+          ) : null}
           <p className="download-note">
             Requires Adobe Premiere Pro 2021 (15.0) or newer. Unzip, double-click{" "}
             <strong>install.bat</strong> (Windows) or <strong>install.command</strong> (Mac), then
