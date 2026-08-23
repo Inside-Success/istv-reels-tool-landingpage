@@ -1,7 +1,0 @@
-version: 1
-project: istv-reels-tool-landingpage
-publish:
-  - path: README.md
-    type: ProjectOverview
-    title: Istv Reels Tool Landingpage Overview
-    tags: [inside-success, application]
