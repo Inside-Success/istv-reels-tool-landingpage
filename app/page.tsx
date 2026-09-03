@@ -86,10 +86,10 @@ async function latestPluginVersion(): Promise<string | null> {
   try {
     const res = await fetch(`https://api.github.com/repos/${PLUGIN_REPO}/releases/latest`, {
       headers: { Accept: "application/vnd.github+json" },
-      // Unauthenticated GitHub allows 60 requests/hour per IP. Revalidating
-      // hourly keeps this to one call regardless of how much traffic the page
-      // takes, so a busy day can never rate-limit the version line away.
-      next: { revalidate: 3600 },
+      // Keep the visible version close to GitHub's latest public release. Next's
+      // shared cache still collapses traffic to one request every five minutes,
+      // comfortably below GitHub's unauthenticated API allowance.
+      next: { revalidate: 300 },
       signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return null;
