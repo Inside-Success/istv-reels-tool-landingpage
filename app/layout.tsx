@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Inside Success AI | AI Video Editing Software",
+  title: "ISTV Reels Tool | Inside Success TV",
   description:
-    "A cinematic landing page for Inside Success AI, an AI video editing suite for fast social, launch, and ad production.",
+    "Find the best moments in your footage. Download the ISTV Reels Tool desktop app or Premiere Pro panel for Windows and macOS.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
