@@ -46,25 +46,31 @@ export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
 
   return (
     <div className="download-panel">
-      <p className="selector-kicker">YOUR DOWNLOAD / 01</p>
+      <p className="selector-kicker">CHOOSE YOUR WORKFLOW</p>
       <fieldset className="selector-group">
-        <legend>Which tool?</legend>
+        <legend>What do you want to make?</legend>
         <div className="choice-row product-choices">
           <label className={product === "desktop" ? "choice active" : "choice"}>
             <input type="radio" name="product" checked={product === "desktop"} onChange={() => setProduct("desktop")} />
-            <span>Reels desktop<small>Standalone app</small></span>
+            <span className="choice-index">01</span>
+            <span className="choice-copy"><strong>Find reel moments</strong><small>Reels desktop · Standalone app</small></span>
+            <span className="choice-meta">Mac + Windows</span>
           </label>
           <label className={isPremiere ? "choice active" : "choice"}>
             <input type="radio" name="product" checked={isPremiere} onChange={() => setProduct("premiere")} />
-            <span>Reels for Premiere<small>Vertical reels & captions</small></span>
+            <span className="choice-index">02</span>
+            <span className="choice-copy"><strong>Build a vertical reel</strong><small>Reels for Premiere · Short form</small></span>
+            <span className="choice-meta">Premiere 2021+</span>
           </label>
-          <label className={isCutSheet ? "choice active" : "choice"}>
+          <label className={isCutSheet ? "choice active cutsheet-choice" : "choice cutsheet-choice"}>
             <input type="radio" name="product" checked={isCutSheet} onChange={() => setProduct("cutsheet")} />
-            <span>Documentary Cut Sheet<small>Premiere Pro · Beta</small></span>
+            <span className="choice-index">03</span>
+            <span className="choice-copy"><strong>Build a documentary assembly</strong><small>Documentary Cut Sheet · Premiere plugin</small></span>
+            <span className="choice-meta">Premiere 25.6+</span>
           </label>
         </div>
         <p className="field-hint" aria-live="polite">
-          {isCutSheet ? "Turn a documentary cut sheet into markers and a rough-cut sequence in Premiere Pro."
+          {isCutSheet ? "Import an XLSX cut sheet, sync its recording times, and create markers or an editable documentary assembly."
             : isPremiere ? "Create vertical reels with reframing and captions inside Premiere Pro."
             : "Transcribe footage and find reel moments in the standalone app."}
         </p>
@@ -102,18 +108,17 @@ export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
       )}
 
       <div className="selection-result" aria-live="polite">
-        <span>SELECTED FILE</span>
+        <span>{isCutSheet ? "DOCUMENTARY PLUGIN" : "SELECTED FILE"}</span>
         <strong>{fileName ?? "Cut Sheet beta download coming soon"}</strong>
       </div>
       {url ? <a className="download-action" href={url}>
-        Download {isCutSheet ? "Cut Sheet beta" : isPremiere ? "Reels panel" : "Reels desktop"} <span aria-hidden="true">↗</span>
+        Download {isCutSheet ? "Documentary Cut Sheet" : isPremiere ? "Reels for Premiere" : "Reels desktop"}
       </a> : <p className="field-hint" role="status">The Cut Sheet download is not available yet. Please check back soon.</p>}
       <p className="download-fineprint">
         {isCutSheet ? (
           <>
-            One ZIP for Windows and macOS. Requires <strong>Premiere Pro 25.6 or newer</strong> and Creative Cloud Desktop.
-            Unzip, open the included .ccx with Creative Cloud Desktop, then open Window → UXP Plugins → ISTV Documentary Cut Sheet.
-            The install guide is included. Core cut-sheet editing runs locally; optional voice-over requires your team’s configured service.
+            <strong>This is the documentary workflow plugin—not the Reels panel.</strong> One ZIP works on Windows and macOS.
+            Requires Premiere Pro 25.6+ and Creative Cloud Desktop. Unzip, open the included .ccx, then find it under Window → UXP Plugins → ISTV Documentary Cut Sheet.
             {cutSheetRelease ? <> Current beta: v{cutSheetRelease.version}.</> : null}
           </>
         ) : isPremiere ? (

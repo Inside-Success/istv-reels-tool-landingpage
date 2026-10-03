@@ -3,7 +3,7 @@ import DownloadSelector from "./download-selector";
 
 const PLUGIN_REPO = "Inside-Success/istv-reels-tool-landingpage";
 const CUTSHEET_REPO = "Inside-Success/istv-documentary-cutsheet-downloads";
-const CUTSHEET_RELEASE_TAG = "v1.2.0";
+const CUTSHEET_RELEASE_TAG = "v1.2.1";
 
 async function latestPluginVersion(): Promise<string | null> {
   try {
@@ -50,9 +50,9 @@ async function latestCutSheetRelease(): Promise<{ version: string; url: string }
 }
 
 const steps = [
-  { number: "01", title: "Bring your footage", detail: "Start with video, audio or a podcast." },
-  { number: "02", title: "Find the moments", detail: "Review transcripts, hooks and standout quotes." },
-  { number: "03", title: "Make it yours", detail: "Export the plan or finish your reel in Premiere." },
+  { number: "01", title: "Choose the job", detail: "Short-form reels, documentary assemblies, or transcript review." },
+  { number: "02", title: "Work where you edit", detail: "Use the desktop app or stay inside Premiere Pro." },
+  { number: "03", title: "Keep control", detail: "Every sequence stays editable and ready for an editor to refine." },
 ];
 
 export default async function Home() {
@@ -80,16 +80,18 @@ export default async function Home() {
 
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="eyebrow"><span className="eyebrow-line" /> INSIDE SUCCESS TV / CREATOR TOOLS</p>
-          <h1 id="hero-title">Make every <em>moment</em> worth watching.</h1>
+          <p className="eyebrow"><span className="eyebrow-line" /> INSIDE SUCCESS TV / EDITOR TOOLS</p>
+          <h1 id="hero-title">Find the story.<br /><em>Build the edit.</em></h1>
           <p className="hero-description">
-            From raw footage to reel-ready ideas. Find the best moments, shape
-            the story, and spend less time searching through a timeline.
+            Three focused tools for post-production: discover reel moments,
+            build vertical edits, or turn a documentary cut sheet into an
+            editable Premiere Pro assembly.
           </p>
-          <a className="primary-button" href="#download">
-            Get ISTV Reels Tool <span aria-hidden="true">↗</span>
-          </a>
-          <p className="hero-caption">A better starting point for every edit.</p>
+          <div className="hero-actions">
+            <a className="primary-button" href="#tools">Compare the tools</a>
+            <a className="secondary-link" href="#documentary">Documentary Cut Sheet</a>
+          </div>
+          <p className="hero-caption">Reels desktop · Reels for Premiere · Documentary for Premiere</p>
         </div>
 
         <div className="hero-art">
@@ -97,7 +99,7 @@ export default async function Home() {
           <div className="product-frame">
             <div className="product-frame-top">
               <span className="frame-monogram">ISTV<span className="frame-dot">.</span></span>
-              <span>REELS TOOL / 001</span>
+              <span>EDITOR TOOLS / 003</span>
             </div>
             <div className="product-image">
               <Image
@@ -109,18 +111,22 @@ export default async function Home() {
               />
             </div>
             <div className="product-frame-bottom">
-              <span>Find the story in the footage.</span>
+              <span>Purpose-built tools for the edit.</span>
               <span aria-hidden="true">✳</span>
             </div>
           </div>
-          <div className="art-stamp" aria-hidden="true"><span>CREATE<br />WITH<br />INTENT</span></div>
+          <div className="documentary-callout">
+            <span>NEW · PREMIERE PRO</span>
+            <strong>Documentary Cut Sheet</strong>
+            <small>XLSX → synced footage → editable assembly</small>
+          </div>
         </div>
       </section>
 
       <section className="steps-section" id="how-it-works" aria-labelledby="steps-heading">
         <div className="section-intro">
           <span className="section-index">THE PROCESS / 01—03</span>
-          <h2 id="steps-heading">From hours of footage<br /><em>to the right few seconds.</em></h2>
+          <h2 id="steps-heading">Start with the work.<br /><em>Choose the right tool.</em></h2>
         </div>
         <div className="steps-grid">
           {steps.map((step) => (
@@ -135,35 +141,40 @@ export default async function Home() {
 
       <section className="tools-section" id="tools" aria-labelledby="tools-heading">
         <div className="tools-heading">
-          <span className="section-index">TOOLS FOR YOUR WORKFLOW</span>
-          <h2 id="tools-heading">Your edit.<br /><em>Your workflow.</em></h2>
+          <span className="section-index">THREE TOOLS · THREE CLEAR JOBS</span>
+          <h2 id="tools-heading">One toolkit.<br /><em>No guesswork.</em></h2>
         </div>
         <div className="tools-grid">
-          <article className="tool-item">
-            <span className="tool-number">01 / STANDALONE</span>
+          <article className="tool-item reels-desktop">
+            <div className="tool-topline"><span className="tool-number">01 / STANDALONE</span><span className="tool-badge">Mac + Windows</span></div>
             <h3>Reels desktop app</h3>
-            <p>Transcribe footage, surface potential reel moments and export the reports you need to plan a cut.</p>
+            <p>Transcribe footage, surface strong short-form moments, and export a clear plan before opening an edit.</p>
+            <ul><li>Best for reviewing footage</li><li>Runs outside Premiere Pro</li></ul>
+            <a href="#download">Choose Reels desktop</a>
           </article>
-          <article className="tool-item">
-            <span className="tool-number">02 / IN YOUR EDIT</span>
+          <article className="tool-item reels-premiere">
+            <div className="tool-topline"><span className="tool-number">02 / SHORT FORM</span><span className="tool-badge">Premiere Pro</span></div>
             <h3>Reels for Premiere</h3>
-            <p>Build editable vertical reel sequences in your Premiere project, with cuts, reframing and captions ready to refine.</p>
+            <p>Build editable vertical reel sequences with cuts, reframing, and captions already placed in your project.</p>
+            <ul><li>Best for social video</li><li>Premiere Pro 2021+</li></ul>
+            <a href="#download">Choose Reels for Premiere</a>
+          </article>
+          <article className="tool-item cutsheet-tool" id="documentary">
+            <div className="tool-topline"><span className="tool-number">03 / DOCUMENTARY · BETA</span><span className="tool-badge light">Premiere Pro 25.6+</span></div>
+            <h3>Documentary Cut Sheet</h3>
+            <p>Import the documentary team’s XLSX, align recording time to synced footage, review every quote, and build markers or an editable assembly.</p>
+            <ul><li>Best for long-form documentary edits</li><li>One ZIP for Mac and Windows</li></ul>
+            {cutSheetRelease ? <a className="tool-download" href={cutSheetRelease.url}>Download Cut Sheet v{cutSheetRelease.version}</a> : <a href="#download">View Cut Sheet details</a>}
           </article>
         </div>
-        <article className="tool-item cutsheet-tool">
-          <span className="tool-number">03 / DOCUMENTARY · BETA</span>
-          <h3>Documentary Cut Sheet</h3>
-          <p>Bring a documentary spreadsheet into Premiere Pro, map quotes to your synced footage, and build markers or a rough-cut sequence. Requires Premiere Pro 25.6 or newer.</p>
-          <a href="#download">Get the Cut Sheet plugin →</a>
-        </article>
       </section>
 
       <section className="download-section" id="download" aria-labelledby="download-heading">
         <div className="download-copy">
-          <span className="section-index">READY WHEN YOU ARE</span>
-          <h2 id="download-heading">Start making<br /><em>the good stuff.</em></h2>
-          <p>Choose how you edit and where you work. We’ll show you one matching download.</p>
-          <span className="download-side-note">Public installers · Windows and macOS</span>
+          <span className="section-index">DOWNLOAD THE RIGHT TOOL</span>
+          <h2 id="download-heading">What are you<br /><em>making today?</em></h2>
+          <p>Select the job first. We’ll show the correct installer, system requirements, and setup steps.</p>
+          <span className="download-side-note">Documentary Cut Sheet is a separate Premiere Pro plugin from ISTV Reels.</span>
         </div>
         <DownloadSelector pluginVersion={pluginVersion} cutSheetRelease={cutSheetRelease} />
       </section>
