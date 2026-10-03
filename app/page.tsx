@@ -3,7 +3,7 @@ import DownloadSelector from "./download-selector";
 
 const PLUGIN_REPO = "Inside-Success/istv-reels-tool-landingpage";
 const CUTSHEET_REPO = "Inside-Success/istv-documentary-cutsheet-downloads";
-const CUTSHEET_RELEASE_TAG = "v1.2.1";
+const CUTSHEET_RELEASE_TAG = "v1.3.0";
 
 async function latestPluginVersion(): Promise<string | null> {
   try {
