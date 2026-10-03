@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 
-type Product = "desktop" | "premiere";
+type Product = "desktop" | "premiere" | "cutsheet";
 type Platform = "windows" | "mac";
 type MacChip = "arm64" | "x64";
 
@@ -22,18 +22,26 @@ const files = {
   },
 };
 
-export default function DownloadSelector({ pluginVersion }: { pluginVersion: string | null }) {
+const subscribeToPlatform = () => () => {};
+const browserPlatform = (): Platform => /Windows/i.test(navigator.userAgent) ? "windows" : "mac";
+const serverPlatform = (): Platform => "mac";
+
+type CutSheetRelease = { version: string; url: string } | null;
+
+export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
+  pluginVersion: string | null;
+  cutSheetRelease: CutSheetRelease;
+}) {
   const [product, setProduct] = useState<Product>("desktop");
-  const [platform, setPlatform] = useState<Platform>("mac");
+  const detectedPlatform = useSyncExternalStore(subscribeToPlatform, browserPlatform, serverPlatform);
+  const [chosenPlatform, setPlatform] = useState<Platform | null>(null);
+  const platform = chosenPlatform ?? detectedPlatform;
   const [macChip, setMacChip] = useState<MacChip>("arm64");
 
-  useEffect(() => {
-    if (/Windows/i.test(navigator.userAgent)) setPlatform("windows");
-  }, []);
-
   const choice = platform === "windows" ? "windows" : macChip;
-  const url = files[product][choice];
-  const fileName = url.split("/").at(-1);
+  const isCutSheet = product === "cutsheet";
+  const url = isCutSheet ? cutSheetRelease?.url : files[product][choice];
+  const fileName = url?.split("/").at(-1);
   const isPremiere = product === "premiere";
 
   return (
@@ -41,19 +49,28 @@ export default function DownloadSelector({ pluginVersion }: { pluginVersion: str
       <p className="selector-kicker">YOUR DOWNLOAD / 01</p>
       <fieldset className="selector-group">
         <legend>Which tool?</legend>
-        <div className="choice-row">
+        <div className="choice-row product-choices">
           <label className={product === "desktop" ? "choice active" : "choice"}>
             <input type="radio" name="product" checked={product === "desktop"} onChange={() => setProduct("desktop")} />
-            <span>Desktop app</span>
+            <span>Reels desktop<small>Standalone app</small></span>
           </label>
           <label className={isPremiere ? "choice active" : "choice"}>
             <input type="radio" name="product" checked={isPremiere} onChange={() => setProduct("premiere")} />
-            <span>Premiere Pro panel</span>
+            <span>Reels for Premiere<small>Vertical reels & captions</small></span>
+          </label>
+          <label className={isCutSheet ? "choice active" : "choice"}>
+            <input type="radio" name="product" checked={isCutSheet} onChange={() => setProduct("cutsheet")} />
+            <span>Documentary Cut Sheet<small>Premiere Pro · Beta</small></span>
           </label>
         </div>
+        <p className="field-hint" aria-live="polite">
+          {isCutSheet ? "Turn a documentary cut sheet into markers and a rough-cut sequence in Premiere Pro."
+            : isPremiere ? "Create vertical reels with reframing and captions inside Premiere Pro."
+            : "Transcribe footage and find reel moments in the standalone app."}
+        </p>
       </fieldset>
 
-      <fieldset className="selector-group">
+      {!isCutSheet && <fieldset className="selector-group">
         <legend>Your computer</legend>
         <div className="choice-row">
           <label className={platform === "mac" ? "choice active" : "choice"}>
@@ -65,9 +82,9 @@ export default function DownloadSelector({ pluginVersion }: { pluginVersion: str
             <span>Windows</span>
           </label>
         </div>
-      </fieldset>
+      </fieldset>}
 
-      {platform === "mac" && (
+      {!isCutSheet && platform === "mac" && (
         <fieldset className="selector-group chip-group">
           <legend>Mac processor</legend>
           <div className="choice-row">
@@ -86,13 +103,20 @@ export default function DownloadSelector({ pluginVersion }: { pluginVersion: str
 
       <div className="selection-result" aria-live="polite">
         <span>SELECTED FILE</span>
-        <strong>{fileName}</strong>
+        <strong>{fileName ?? "Cut Sheet beta download coming soon"}</strong>
       </div>
-      <a className="download-action" href={url}>
-        Download {isPremiere ? "Premiere panel" : "desktop app"} <span aria-hidden="true">↗</span>
-      </a>
+      {url ? <a className="download-action" href={url}>
+        Download {isCutSheet ? "Cut Sheet beta" : isPremiere ? "Reels panel" : "Reels desktop"} <span aria-hidden="true">↗</span>
+      </a> : <p className="field-hint" role="status">The Cut Sheet download is not available yet. Please check back soon.</p>}
       <p className="download-fineprint">
-        {isPremiere ? (
+        {isCutSheet ? (
+          <>
+            One ZIP for Windows and macOS. Requires <strong>Premiere Pro 25.6 or newer</strong> and Creative Cloud Desktop.
+            Unzip, open the included .ccx with Creative Cloud Desktop, then open Window → UXP Plugins → ISTV Documentary Cut Sheet.
+            The install guide is included. Core cut-sheet editing runs locally; optional voice-over requires your team’s configured service.
+            {cutSheetRelease ? <> Current beta: v{cutSheetRelease.version}.</> : null}
+          </>
+        ) : isPremiere ? (
           <>
             Requires Premiere Pro 2021 or newer. Unzip and run <strong>{platform === "windows" ? "install.bat" : "install.command"}</strong>, then restart Premiere and open Window → Extensions → ISTV Reel Tool. You’ll need an access token from your admin. The panel does not update itself.
             {pluginVersion ? <> Current release: v{pluginVersion}.</> : null}

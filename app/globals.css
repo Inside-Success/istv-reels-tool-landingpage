@@ -187,3 +187,9 @@ h2 { font-size: clamp(2.9rem, 5vw, 5.7rem); line-height: 1.06; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+.product-choices { flex-direction: column; }
+.product-choices .choice { justify-content: flex-start; text-align: left; padding: 14px 18px; }
+.cutsheet-tool { margin-top: 36px; padding-top: 30px; border-top: 1px solid #d6d9d5; }
+.cutsheet-tool p { max-width: 680px; }
+.cutsheet-tool a { display: inline-block; margin-top: 12px; text-decoration: underline; text-underline-offset: 4px; }
