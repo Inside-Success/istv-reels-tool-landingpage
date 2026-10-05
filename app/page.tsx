@@ -3,7 +3,9 @@ import DownloadSelector from "./download-selector";
 
 const PLUGIN_REPO = "Inside-Success/istv-reels-tool-landingpage";
 const CUTSHEET_REPO = "Inside-Success/istv-documentary-cutsheet-downloads";
-const CUTSHEET_RELEASE_TAG = "v1.3.2";
+// Empty follows the latest published release. Set CUTSHEET_RELEASE_TAG in the
+// environment only to stage a specific tag; GitHub's latest skips prereleases.
+const CUTSHEET_RELEASE_TAG = "";
 
 async function latestPluginVersion(): Promise<string | null> {
   try {
@@ -63,7 +65,7 @@ export default async function Home() {
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Inside Success TV home">
           <Image
-            src="https://insidesuccesstv.com/wp-content/uploads/2026/06/Inside-Success-Logo-1024x147.png"
+            src="/inside-success-logo.png"
             alt="Inside Success TV"
             width={244}
             height={35}
@@ -118,7 +120,7 @@ export default async function Home() {
           <div className="documentary-callout">
             <span>NEW · PREMIERE PRO</span>
             <strong>Documentary Cut Sheet</strong>
-            <small>XLSX → synced footage → editable assembly</small>
+            <small>XLSX → synced footage → assembly with voice-over</small>
           </div>
         </div>
       </section>
@@ -162,8 +164,8 @@ export default async function Home() {
           <article className="tool-item cutsheet-tool" id="documentary">
             <div className="tool-topline"><span className="tool-number">03 / DOCUMENTARY · BETA</span><span className="tool-badge light">Premiere Pro 25.6+</span></div>
             <h3>Documentary Cut Sheet</h3>
-            <p>Import the documentary team’s XLSX, align recording time to synced footage, review every quote, and build markers or an editable assembly.</p>
-            <ul><li>Best for long-form documentary edits</li><li>One ZIP for Mac and Windows</li></ul>
+            <p>Import the documentary team’s XLSX, align recording time to synced footage, and build markers or an editable assembly that keeps every camera angle, with ElevenLabs voice-over placed in story order.</p>
+            <ul><li>Best for long-form documentary edits</li><li>Voice-over and multicam assembly</li><li>Updates from inside the panel</li></ul>
             {cutSheetRelease ? <a className="tool-download" href={cutSheetRelease.url}>Download Cut Sheet v{cutSheetRelease.version}</a> : <a href="#download">View Cut Sheet details</a>}
           </article>
         </div>
