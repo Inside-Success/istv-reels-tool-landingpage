@@ -70,7 +70,7 @@ export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
           </label>
         </div>
         <p className="field-hint" aria-live="polite">
-          {isCutSheet ? "Import an XLSX cut sheet, sync its recording times, and create markers or an editable documentary assembly."
+          {isCutSheet ? "Import an XLSX cut sheet, sync its recording times, and build a multicam assembly with ElevenLabs voice-over."
             : isPremiere ? "Create vertical reels with reframing and captions inside Premiere Pro."
             : "Transcribe footage and find reel moments in the standalone app."}
         </p>
@@ -118,7 +118,7 @@ export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
         {isCutSheet ? (
           <>
             <strong>This is the documentary workflow plugin—not the Reels panel.</strong> One ZIP works on Windows and macOS.
-            Requires Premiere Pro 25.6+ and Creative Cloud Desktop. Unzip, open the included .ccx, then find it under Window → UXP Plugins → ISTV Documentary Cut Sheet.
+            Requires Premiere Pro 25.6+ and Creative Cloud Desktop. Unzip, open the included .ccx, then find it under Window → UXP Plugins → ISTV Documentary Cut Sheet. Voice-over needs a team token from your admin. Later updates install from the panel’s Check Update button.
             {cutSheetRelease ? <> Current beta: v{cutSheetRelease.version}.</> : null}
           </>
         ) : isPremiere ? (
