@@ -1,4 +1,5 @@
 import Image from "next/image";
+import DownloadLink from "./download-link";
 import DownloadSelector from "./download-selector";
 
 const PLUGIN_REPO = "Inside-Success/istv-reels-tool-landingpage";
@@ -152,21 +153,21 @@ export default async function Home() {
             <h3>Reels desktop app</h3>
             <p>Transcribe footage, surface strong short-form moments, and export a clear plan before opening an edit.</p>
             <ul><li>Best for reviewing footage</li><li>Runs outside Premiere Pro</li></ul>
-            <a href="#download">Choose Reels desktop</a>
+            <DownloadLink product="desktop">Choose Reels desktop app</DownloadLink>
           </article>
           <article className="tool-item reels-premiere">
             <div className="tool-topline"><span className="tool-number">02 / SHORT FORM</span><span className="tool-badge">Premiere Pro</span></div>
             <h3>Reels for Premiere</h3>
             <p>Build editable vertical reel sequences with cuts, reframing, and captions already placed in your project.</p>
             <ul><li>Best for social video</li><li>Premiere Pro 2021+</li></ul>
-            <a href="#download">Choose Reels for Premiere</a>
+            <DownloadLink product="premiere">Choose Reels for Premiere</DownloadLink>
           </article>
           <article className="tool-item cutsheet-tool" id="documentary">
             <div className="tool-topline"><span className="tool-number">03 / DOCUMENTARY · BETA</span><span className="tool-badge light">Premiere Pro 25.6+</span></div>
             <h3>Documentary Cut Sheet</h3>
             <p>Import the documentary team’s XLSX, align recording time to synced footage, and build markers or an editable assembly that keeps every camera angle, with ElevenLabs voice-over placed in story order.</p>
             <ul><li>Best for long-form documentary edits</li><li>Voice-over and multicam assembly</li><li>Updates from inside the panel</li></ul>
-            {cutSheetRelease ? <a className="tool-download" href={cutSheetRelease.url}>Download Cut Sheet v{cutSheetRelease.version}</a> : <a href="#download">View Cut Sheet details</a>}
+            {cutSheetRelease ? <a className="tool-download" href={cutSheetRelease.url}>Download Cut Sheet v{cutSheetRelease.version}</a> : <DownloadLink product="cutsheet">View Cut Sheet details</DownloadLink>}
           </article>
         </div>
       </section>

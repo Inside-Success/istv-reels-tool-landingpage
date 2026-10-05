@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
-
-type Product = "desktop" | "premiere" | "cutsheet";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { PICK_EVENT, type Product } from "./download-link";
 type Platform = "windows" | "mac";
 type MacChip = "arm64" | "x64";
 
@@ -33,6 +32,12 @@ export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
   cutSheetRelease: CutSheetRelease;
 }) {
   const [product, setProduct] = useState<Product>("desktop");
+  // Tool cards above pick their product here before jumping to this section.
+  useEffect(() => {
+    const pick = (event: Event) => setProduct((event as CustomEvent<Product>).detail);
+    window.addEventListener(PICK_EVENT, pick);
+    return () => window.removeEventListener(PICK_EVENT, pick);
+  }, []);
   const detectedPlatform = useSyncExternalStore(subscribeToPlatform, browserPlatform, serverPlatform);
   const [chosenPlatform, setPlatform] = useState<Platform | null>(null);
   const platform = chosenPlatform ?? detectedPlatform;
@@ -46,26 +51,26 @@ export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
 
   return (
     <div className="download-panel">
-      <p className="selector-kicker">CHOOSE YOUR WORKFLOW</p>
+      <p className="selector-kicker">CHOOSE YOUR TOOL</p>
       <fieldset className="selector-group">
-        <legend>What do you want to make?</legend>
+        <legend>Which tool do you need?</legend>
         <div className="choice-row product-choices">
           <label className={product === "desktop" ? "choice active" : "choice"}>
             <input type="radio" name="product" checked={product === "desktop"} onChange={() => setProduct("desktop")} />
             <span className="choice-index">01</span>
-            <span className="choice-copy"><strong>Find reel moments</strong><small>Reels desktop · Standalone app</small></span>
+            <span className="choice-copy"><strong>Reels desktop app</strong><small>Find reel moments · Standalone app</small></span>
             <span className="choice-meta">Mac + Windows</span>
           </label>
           <label className={isPremiere ? "choice active" : "choice"}>
             <input type="radio" name="product" checked={isPremiere} onChange={() => setProduct("premiere")} />
             <span className="choice-index">02</span>
-            <span className="choice-copy"><strong>Build a vertical reel</strong><small>Reels for Premiere · Short form</small></span>
+            <span className="choice-copy"><strong>Reels for Premiere</strong><small>Build vertical reels · Short form</small></span>
             <span className="choice-meta">Premiere 2021+</span>
           </label>
           <label className={isCutSheet ? "choice active cutsheet-choice" : "choice cutsheet-choice"}>
             <input type="radio" name="product" checked={isCutSheet} onChange={() => setProduct("cutsheet")} />
             <span className="choice-index">03</span>
-            <span className="choice-copy"><strong>Build a documentary assembly</strong><small>Documentary Cut Sheet · Premiere plugin</small></span>
+            <span className="choice-copy"><strong>Documentary Cut Sheet</strong><small>Build a documentary assembly · Premiere plugin</small></span>
             <span className="choice-meta">Premiere 25.6+</span>
           </label>
         </div>
@@ -112,7 +117,7 @@ export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
         <strong>{fileName ?? "Cut Sheet beta download coming soon"}</strong>
       </div>
       {url ? <a className="download-action" href={url}>
-        Download {isCutSheet ? "Documentary Cut Sheet" : isPremiere ? "Reels for Premiere" : "Reels desktop"}
+        Download {isCutSheet ? "Documentary Cut Sheet" : isPremiere ? "Reels for Premiere" : "Reels desktop app"}
       </a> : <p className="field-hint" role="status">The Cut Sheet download is not available yet. Please check back soon.</p>}
       <p className="download-fineprint">
         {isCutSheet ? (
