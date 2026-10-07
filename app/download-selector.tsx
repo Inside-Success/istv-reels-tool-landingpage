@@ -2,139 +2,115 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { PICK_EVENT, type Product } from "./download-link";
+
 type Platform = "windows" | "mac";
-type MacChip = "arm64" | "x64";
+type CutSheetRelease = { version: string; url: string } | null;
 
 const DESKTOP_REPO = "Inside-Success/istv-reel-editor-desktop";
 const PLUGIN_REPO = "Inside-Success/istv-reels-tool-landingpage";
+const d = (repo: string, f: string) => `https://github.com/${repo}/releases/latest/download/${f}`;
 
 const files = {
-  desktop: {
-    windows: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-Setup.exe`,
-    arm64: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-arm64.dmg`,
-    x64: `https://github.com/${DESKTOP_REPO}/releases/latest/download/ISTV-Reel-Editor-x64.dmg`,
-  },
-  premiere: {
-    windows: `https://github.com/${PLUGIN_REPO}/releases/latest/download/ISTV-Reel-Tool-win-x64.zip`,
-    arm64: `https://github.com/${PLUGIN_REPO}/releases/latest/download/ISTV-Reel-Tool-mac-arm64.zip`,
-    x64: `https://github.com/${PLUGIN_REPO}/releases/latest/download/ISTV-Reel-Tool-mac-x64.zip`,
-  },
-};
+  desktop: [
+    { os: "windows", label: "Windows", note: "64-bit installer", url: d(DESKTOP_REPO, "ISTV-Reel-Editor-Setup.exe") },
+    { os: "mac", label: "Mac, Apple Silicon", note: "M1 or newer", url: d(DESKTOP_REPO, "ISTV-Reel-Editor-arm64.dmg") },
+    { os: "mac", label: "Mac, Intel", note: "Older Macs", url: d(DESKTOP_REPO, "ISTV-Reel-Editor-x64.dmg") },
+  ],
+  premiere: [
+    { os: "windows", label: "Windows", note: "64-bit ZIP", url: d(PLUGIN_REPO, "ISTV-Reel-Tool-win-x64.zip") },
+    { os: "mac", label: "Mac, Apple Silicon", note: "M1 or newer", url: d(PLUGIN_REPO, "ISTV-Reel-Tool-mac-arm64.zip") },
+    { os: "mac", label: "Mac, Intel", note: "Older Macs", url: d(PLUGIN_REPO, "ISTV-Reel-Tool-mac-x64.zip") },
+  ],
+} as const;
 
-const subscribeToPlatform = () => () => {};
-const browserPlatform = (): Platform => /Windows/i.test(navigator.userAgent) ? "windows" : "mac";
-const serverPlatform = (): Platform => "mac";
+const subscribe = () => () => {};
+const browserPlatform = (): Platform | null => /Windows/i.test(navigator.userAgent) ? "windows" : /Mac/i.test(navigator.userAgent) ? "mac" : null;
+const serverPlatform = (): Platform | null => null;
 
-type CutSheetRelease = { version: string; url: string } | null;
+function FileRow({ label, note, url, mine }: { label: string; note: string; url: string; mine: boolean }) {
+  return (
+    <a className={mine ? "file-row mine" : "file-row"} href={url} download>
+      <span className="file-text">
+        <strong>{label}{mine && <em>Your computer</em>}</strong>
+        <small>{note} · {url.split("/").at(-1)}</small>
+      </span>
+      <span className="file-go" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M5 19h14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </span>
+    </a>
+  );
+}
 
 export default function DownloadSelector({ pluginVersion, cutSheetRelease }: {
   pluginVersion: string | null;
   cutSheetRelease: CutSheetRelease;
 }) {
-  const [product, setProduct] = useState<Product>("desktop");
-  // Tool cards above pick their product here before jumping to this section.
+  const [picked, setPicked] = useState<Product | null>(null);
+  const platform = useSyncExternalStore(subscribe, browserPlatform, serverPlatform);
+
+  // Tool cards above pick a product; its download card glows when you land here.
   useEffect(() => {
-    const pick = (event: Event) => setProduct((event as CustomEvent<Product>).detail);
+    const pick = (event: Event) => {
+      setPicked(null);
+      requestAnimationFrame(() => setPicked((event as CustomEvent<Product>).detail));
+    };
     window.addEventListener(PICK_EVENT, pick);
     return () => window.removeEventListener(PICK_EVENT, pick);
   }, []);
-  const detectedPlatform = useSyncExternalStore(subscribeToPlatform, browserPlatform, serverPlatform);
-  const [chosenPlatform, setPlatform] = useState<Platform | null>(null);
-  const platform = chosenPlatform ?? detectedPlatform;
-  const [macChip, setMacChip] = useState<MacChip>("arm64");
 
-  const choice = platform === "windows" ? "windows" : macChip;
-  const isCutSheet = product === "cutsheet";
-  const url = isCutSheet ? cutSheetRelease?.url : files[product][choice];
-  const fileName = url?.split("/").at(-1);
-  const isPremiere = product === "premiere";
+  const cls = (p: Product, extra = "") => `glass dl-card${extra}${picked === p ? " picked" : ""}`;
 
   return (
-    <div className="download-panel">
-      <p className="selector-kicker">CHOOSE YOUR TOOL</p>
-      <fieldset className="selector-group">
-        <legend>Which tool do you need?</legend>
-        <div className="choice-row product-choices">
-          <label className={product === "desktop" ? "choice active" : "choice"}>
-            <input type="radio" name="product" checked={product === "desktop"} onChange={() => setProduct("desktop")} />
-            <span className="choice-index">01</span>
-            <span className="choice-copy"><strong>Reels desktop app</strong><small>Find reel moments · Standalone app</small></span>
-            <span className="choice-meta">Mac + Windows</span>
-          </label>
-          <label className={isPremiere ? "choice active" : "choice"}>
-            <input type="radio" name="product" checked={isPremiere} onChange={() => setProduct("premiere")} />
-            <span className="choice-index">02</span>
-            <span className="choice-copy"><strong>Reels for Premiere</strong><small>Build vertical reels · Short form</small></span>
-            <span className="choice-meta">Premiere 2021+</span>
-          </label>
-          <label className={isCutSheet ? "choice active cutsheet-choice" : "choice cutsheet-choice"}>
-            <input type="radio" name="product" checked={isCutSheet} onChange={() => setProduct("cutsheet")} />
-            <span className="choice-index">03</span>
-            <span className="choice-copy"><strong>Documentary Cut Sheet</strong><small>Build a documentary assembly · Premiere plugin</small></span>
-            <span className="choice-meta">Premiere 25.6+</span>
-          </label>
+    <div className="dl-grid">
+      <article className={cls("desktop")} id="dl-desktop" aria-labelledby="dl-desktop-h">
+        <header className="dl-head">
+          <h3 id="dl-desktop-h">Reels desktop app</h3>
+          <span className="chip">Standalone</span>
+        </header>
+        <p className="dl-sum">Find reel moments outside Premiere.</p>
+        <div className="file-list">
+          {files.desktop.map((f) => <FileRow key={f.url} {...f} mine={f.os === platform} />)}
         </div>
-        <p className="field-hint" aria-live="polite">
-          {isCutSheet ? "Import an XLSX cut sheet, sync its recording times, and build a multicam assembly with ElevenLabs voice-over."
-            : isPremiere ? "Create vertical reels with reframing and captions inside Premiere Pro."
-            : "Transcribe footage and find reel moments in the standalone app."}
-        </p>
-      </fieldset>
+        <ul className="dl-notes">
+          <li>Needs a connection to the ISTV backend.</li>
+          <li>Your browser may ask you to confirm a download from GitHub.</li>
+        </ul>
+      </article>
 
-      {!isCutSheet && <fieldset className="selector-group">
-        <legend>Your computer</legend>
-        <div className="choice-row">
-          <label className={platform === "mac" ? "choice active" : "choice"}>
-            <input type="radio" name="platform" checked={platform === "mac"} onChange={() => setPlatform("mac")} />
-            <span>macOS</span>
-          </label>
-          <label className={platform === "windows" ? "choice active" : "choice"}>
-            <input type="radio" name="platform" checked={platform === "windows"} onChange={() => setPlatform("windows")} />
-            <span>Windows</span>
-          </label>
+      <article className={cls("premiere")} id="dl-premiere" aria-labelledby="dl-premiere-h">
+        <header className="dl-head">
+          <h3 id="dl-premiere-h">Reels for Premiere</h3>
+          <span className="chip">{pluginVersion ? `v${pluginVersion}` : "Premiere 2021+"}</span>
+        </header>
+        <p className="dl-sum">Build vertical reels inside Premiere Pro.</p>
+        <div className="file-list">
+          {files.premiere.map((f) => <FileRow key={f.url} {...f} mine={f.os === platform} />)}
         </div>
-      </fieldset>}
+        <ol className="dl-notes steps">
+          <li>Unzip, then run <code>install.bat</code> on Windows or <code>install.command</code> on Mac.</li>
+          <li>Restart Premiere and open Window, Extensions, ISTV Reel Tool.</li>
+          <li>Enter the access token from your admin. This panel does not update itself.</li>
+        </ol>
+      </article>
 
-      {!isCutSheet && platform === "mac" && (
-        <fieldset className="selector-group chip-group">
-          <legend>Mac processor</legend>
-          <div className="choice-row">
-            <label className={macChip === "arm64" ? "choice active" : "choice"}>
-              <input type="radio" name="mac-chip" checked={macChip === "arm64"} onChange={() => setMacChip("arm64")} />
-              <span>Apple Silicon <small>M1 or newer</small></span>
-            </label>
-            <label className={macChip === "x64" ? "choice active" : "choice"}>
-              <input type="radio" name="mac-chip" checked={macChip === "x64"} onChange={() => setMacChip("x64")} />
-              <span>Intel Mac</span>
-            </label>
-          </div>
-          <p className="field-hint">Not sure? On your Mac, open Apple menu → About This Mac.</p>
-        </fieldset>
-      )}
-
-      <div className="selection-result" aria-live="polite">
-        <span>{isCutSheet ? "DOCUMENTARY PLUGIN" : "SELECTED FILE"}</span>
-        <strong>{fileName ?? "Cut Sheet beta download coming soon"}</strong>
-      </div>
-      {url ? <a className="download-action" href={url}>
-        Download {isCutSheet ? "Documentary Cut Sheet" : isPremiere ? "Reels for Premiere" : "Reels desktop app"}
-      </a> : <p className="field-hint" role="status">The Cut Sheet download is not available yet. Please check back soon.</p>}
-      <p className="download-fineprint">
-        {isCutSheet ? (
-          <>
-            <strong>This is the documentary workflow plugin—not the Reels panel.</strong> One ZIP works on Windows and macOS.
-            Requires Premiere Pro 25.6+ and Creative Cloud Desktop. Unzip, open the included .ccx, then find it under Window → UXP Plugins → ISTV Documentary Cut Sheet. Voice-over needs a team token from your admin. Later updates install from the panel’s Check Update button.
-            {cutSheetRelease ? <> Current beta: v{cutSheetRelease.version}.</> : null}
-          </>
-        ) : isPremiere ? (
-          <>
-            Requires Premiere Pro 2021 or newer. Unzip and run <strong>{platform === "windows" ? "install.bat" : "install.command"}</strong>, then restart Premiere and open Window → Extensions → ISTV Reel Tool. You’ll need an access token from your admin. The panel does not update itself.
-            {pluginVersion ? <> Current release: v{pluginVersion}.</> : null}
-          </>
-        ) : (
-          <>The desktop app requires a connection to the ISTV backend. Your browser may ask you to confirm a download from GitHub Releases.</>
-        )}
-      </p>
+      <article className={cls("cutsheet", " dl-dark")} id="dl-cutsheet" aria-labelledby="dl-cutsheet-h">
+        <header className="dl-head">
+          <h3 id="dl-cutsheet-h">Documentary Cut Sheet</h3>
+          <span className="chip chip-glow">{cutSheetRelease ? `Beta v${cutSheetRelease.version}` : "Beta"}</span>
+        </header>
+        <p className="dl-sum">A separate Premiere plugin, not the Reels panel. One ZIP for Windows and Mac.</p>
+        <div className="file-list">
+          {cutSheetRelease
+            ? <FileRow label="Windows and Mac" note="Premiere Pro 25.6+" url={cutSheetRelease.url} mine={false} />
+            : <p className="file-empty" role="status">The Cut Sheet download is not published yet. Check back soon, or ask your admin for the beta build.</p>}
+        </div>
+        <ol className="dl-notes steps">
+          <li>Needs Premiere Pro 25.6+ and Creative Cloud Desktop.</li>
+          <li>Unzip and open the included <code>.ccx</code> file.</li>
+          <li>Find it under Window, UXP Plugins, ISTV Documentary Cut Sheet.</li>
+          <li>Voice-over needs a team token from your admin. Later updates install from Check Update in the panel.</li>
+        </ol>
+      </article>
     </div>
   );
 }
