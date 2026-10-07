@@ -109,22 +109,17 @@ export default async function Home() {
           <a href="#download">Download</a>
           <a href="https://insidesuccesstv.com/" target="_blank" rel="noreferrer">Inside Success TV</a>
         </nav>
-        <a className="nav-pill" href="#download">Download</a>
       </header>
 
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="social-proof load" style={{ ["--d" as string]: "0ms" }}>
-            <span className="proof-dots" aria-hidden="true"><i /><i /><i /></span>
-            Built for the Inside Success TV edit team
-          </p>
-          <h1 id="hero-title" className="load" style={{ ["--d" as string]: "90ms" }}>
+          <h1 id="hero-title" className="load" style={{ ["--d" as string]: "0ms" }}>
             Find the story,<br />build the edit.
           </h1>
-          <p className="hero-description load" style={{ ["--d" as string]: "180ms" }}>
+          <p className="hero-description load" style={{ ["--d" as string]: "100ms" }}>
             Three focused tools for post-production. Find reel moments, cut vertical edits, or turn a documentary cut sheet into a Premiere Pro assembly.
           </p>
-          <div className="hero-actions load" style={{ ["--d" as string]: "270ms" }}>
+          <div className="hero-actions load" style={{ ["--d" as string]: "200ms" }}>
             <a className="btn-dark" href="#download"><span className="btn-icon"><Icon name="spark" /></span>Download a tool</a>
             <a className="btn-glass" href="#tools">See what each one does</a>
           </div>
@@ -200,9 +195,28 @@ export default async function Home() {
       </section>
 
       <footer className="site-footer">
-        <a className="footer-brand" href="https://insidesuccesstv.com/" target="_blank" rel="noreferrer">Inside Success TV</a>
-        <p>Tools for the stories worth sharing.</p>
-        <a href="#top">Back to top</a>
+        <div className="footer-main">
+          <div className="footer-intro">
+            <a className="footer-brand" href="https://insidesuccesstv.com/" target="_blank" rel="noreferrer">Inside Success TV</a>
+            <p>Purpose-built editing tools for stories worth sharing.</p>
+          </div>
+          <nav className="footer-group" aria-label="Footer navigation">
+            <h2>Explore</h2>
+            <a href="#tools">Tools</a>
+            <a href="#download">Downloads</a>
+            <a href="#top">Back to top</a>
+          </nav>
+          <div className="footer-group">
+            <h2>Compatibility</h2>
+            <p>Desktop: macOS &amp; Windows</p>
+            <p>Reels: Premiere Pro 2021+</p>
+            <p>Cut Sheet: Premiere Pro 25.6+</p>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} Inside Success TV</p>
+          <p>Post-production tools for the ISTV edit team</p>
+        </div>
       </footer>
     </main>
   );
