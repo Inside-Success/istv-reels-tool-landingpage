@@ -1,5 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="15" fill="#162027"/>
-  <path d="M14 19h7v26h-7zm12 0h23v6H33v4h13v6H33v10h-7z" fill="#fffefa"/>
-  <circle cx="49" cy="43" r="4" fill="#d95a34"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Inside Success TV">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#303b48"/>
+      <stop offset="1" stop-color="#141b23"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <rect x="4.5" y="4.5" width="55" height="55" rx="12" fill="none" stroke="#f6dcc8" stroke-opacity=".72"/>
+  <text x="11" y="42" fill="#fffdfa" font-family="Georgia, 'Times New Roman', serif" font-size="30" font-weight="700" letter-spacing="-2">IS</text>
+  <path d="m45 17 8 5-8 5V17Z" fill="#ffc58f"/>
 </svg>

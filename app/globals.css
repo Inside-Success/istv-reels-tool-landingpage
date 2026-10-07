@@ -61,9 +61,9 @@ code { padding: 1px 6px; border-radius: 6px; background: rgba(27,36,48,.07); fon
 .chip-glow { border-color: rgba(255,197,143,.7); background: linear-gradient(180deg, #fff3e6, #ffe2c6); color: #8a4f22; }
 
 /* ---------- header ---------- */
-.site-header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 24px;
-  width: 100%; max-width: 1320px; margin: 0 auto; padding: 20px var(--pad); background: rgba(238,241,244,.82);
-  border-bottom: 1px solid rgba(27,36,48,.09); box-shadow: 0 10px 30px -28px rgba(27,36,48,.7);
+.site-header { position: sticky; top: 14px; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  width: calc(100% - clamp(24px, 4vw, 56px)); max-width: 1240px; margin: 14px auto 0; padding: 16px clamp(20px, 4vw, 48px); background: rgba(246,248,249,.82);
+  border: 1px solid rgba(27,36,48,.14); border-radius: 20px; box-shadow: 0 18px 50px -30px rgba(27,36,48,.55), 0 1px 0 rgba(255,255,255,.85) inset;
   backdrop-filter: blur(18px) saturate(1.25); -webkit-backdrop-filter: blur(18px) saturate(1.25); }
 .brand img { display: block; width: clamp(140px, 15vw, 190px); height: auto; filter: brightness(0) opacity(.86); }
 .site-nav { display: flex; gap: clamp(18px, 3vw, 40px); font-size: .9rem; font-weight: 500; color: var(--ink-soft); }
@@ -232,7 +232,7 @@ h2 { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3.5rem); line-heig
   .dl-grid { max-width: 720px; }
 }
 @media (max-width: 720px) {
-  .site-header { padding-top: 16px; padding-bottom: 16px; }
+  .site-header { top: 10px; width: calc(100% - 20px); margin-top: 10px; padding: 14px 18px; border-radius: 16px; }
   .site-nav { display: none; }
   .hero { padding-bottom: 50px; }
   .hero-art { padding: 50px 0 70px; }
