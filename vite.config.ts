@@ -17,6 +17,14 @@ const { d1, r2 } = hostingConfig;
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
+  assets: {
+    binding: "ASSETS",
+    directory: "./public",
+    not_found_handling: "none" as const,
+  },
+  images: {
+    binding: "IMAGES",
+  },
   d1_databases: d1
     ? [
         {
